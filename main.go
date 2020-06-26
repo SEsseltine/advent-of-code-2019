@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func main() {
@@ -12,6 +13,10 @@ func main() {
 	fmt.Println("===========")
 	fmt.Println("Problem 1:", day1_1())
 	fmt.Println("Problem 2:", day1_2())
+	fmt.Println()
+	fmt.Println("Day 2")
+	fmt.Println("===========")
+	fmt.Println("Problem 1:", day2_1())
 }
 
 func readFile(path string) []string {
@@ -64,4 +69,33 @@ func day1_2() int {
 		sum += day1_2_algorithm(val)
 	}
 	return sum
+}
+
+func day2_1_algorithm(intcode []int) []int {
+	// Reset the code as instructed
+	intcode[1] = 12
+	intcode[2] = 2
+	for pos := 0; pos < len(intcode); pos += 4 {
+		if intcode[pos] == 1 {
+			intcode[intcode[pos+3]] = intcode[intcode[pos+1]] + intcode[intcode[pos+2]]
+		} else if intcode[pos] == 2 {
+			intcode[intcode[pos+3]] = intcode[intcode[pos+1]] * intcode[intcode[pos+2]]
+		} else if intcode[pos] == 99 {
+			return intcode
+		} else {
+			panic("Something went wrong reading the intcode, bad opcode instruction")
+		}
+	}
+	return intcode
+}
+
+func day2_1() int {
+	lines := readFile("./day2/problem_1.txt")
+	var intcode []int
+	for _, val := range strings.Split(lines[0], ",") {
+		num, err := strconv.Atoi(val)
+		check(err)
+		intcode = append(intcode, num)
+	}
+	return day2_1_algorithm(intcode)[0]
 }
