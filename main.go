@@ -16,7 +16,10 @@ func main() {
 	fmt.Println()
 	fmt.Println("Day 2")
 	fmt.Println("===========")
-	fmt.Println("Problem 1:", day2_1())
+	x, y := 12, 2
+	fmt.Println("Problem 1:", day2_1(x, y)[0])
+	noun, verb := day2_2()
+	fmt.Println("Problem 2:", 100*noun+verb)
 }
 
 func readFile(path string) []string {
@@ -71,10 +74,10 @@ func day1_2() int {
 	return sum
 }
 
-func day2_1_algorithm(intcode []int) []int {
+func day2_1_algorithm(intcode []int, noun int, verb int) []int {
 	// Reset the code as instructed
-	intcode[1] = 12
-	intcode[2] = 2
+	intcode[1] = noun
+	intcode[2] = verb
 	for pos := 0; pos < len(intcode); pos += 4 {
 		if intcode[pos] == 1 {
 			intcode[intcode[pos+3]] = intcode[intcode[pos+1]] + intcode[intcode[pos+2]]
@@ -89,7 +92,7 @@ func day2_1_algorithm(intcode []int) []int {
 	return intcode
 }
 
-func day2_1() int {
+func day2_1(noun int, verb int) []int {
 	lines := readFile("./day2/problem_1.txt")
 	var intcode []int
 	for _, val := range strings.Split(lines[0], ",") {
@@ -97,5 +100,16 @@ func day2_1() int {
 		check(err)
 		intcode = append(intcode, num)
 	}
-	return day2_1_algorithm(intcode)[0]
+	return day2_1_algorithm(intcode, noun, verb)
+}
+
+func day2_2() (int, int) {
+	for i := 0; i < 100; i++ {
+		for j := 0; j < 100; j++ {
+			if day2_1(i, j)[0] == 19690720 {
+				return i, j
+			}
+		}
+	}
+	return -1, -1
 }
