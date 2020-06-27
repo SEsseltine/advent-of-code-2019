@@ -13,7 +13,7 @@ func ProbOne() int {
 	count := 0
 	for i := MIN_VALUE; i <= MAX_VALUE; i++ {
 		if validate(strconv.Itoa(i)) {
-			count += 1
+			count++
 		}
 	}
 	return count
@@ -21,10 +21,16 @@ func ProbOne() int {
 
 func ProbTwo() int {
 	count := 0
+	var reduced []string
 	for i := MIN_VALUE; i <= MAX_VALUE; i++ {
 		str := strconv.Itoa(i)
-		if validate(str) && doubleNotInLargerSet(str) {
-			count += 1
+		if validate(str) {
+			reduced = append(reduced, str)
+		}
+	}
+	for _, str := range reduced {
+		if doubleNotInLargerSet(str) {
+			count++
 		}
 	}
 	return count
@@ -50,8 +56,19 @@ func hasDouble(input string) bool {
 }
 
 func doubleNotInLargerSet(input string) bool {
-	// TODO: Implement requirement ensuring there is a double not part of a larger set
-	return true
+	start := 0
+	for start < len(input)-2 {
+		end := start + 1
+		for end < len(input) && input[start] == input[end] {
+			end++
+		}
+		if end-start > 2 {
+			input = input[:start] + input[end:]
+		} else {
+			start++
+		}
+	}
+	return hasDouble(input)
 }
 
 func increasing(input string) bool {
