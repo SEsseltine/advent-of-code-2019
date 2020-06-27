@@ -1,2 +1,2 @@
-# advent-of-code-2019
-Completing the advent of code problems from 2019 (adventofcode.com/2019)
+# Advent of Code 2019 Challenge
+This repository is working through the Advent of Code 2019 Challenge in Go. [Check out the challenge here!](https://adventofcode.com/2019/)
