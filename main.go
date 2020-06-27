@@ -4,6 +4,7 @@ import (
 	"./day1"
 	"./day2"
 	"./day3"
+	"./day4"
 )
 
 func main() {
@@ -21,4 +22,9 @@ func main() {
 	println("===========")
 	println("Problem 1:", day3.ProbOne())
 	println("Problem 2:", day3.ProbTwo())
+	println()
+	println("Day 4")
+	println("===========")
+	println("Problem 1:", day4.ProbOne())
+	println("Problem 1:", day4.ProbTwo())
 }
