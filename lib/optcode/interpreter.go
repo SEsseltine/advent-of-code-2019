@@ -1,7 +1,6 @@
 package optcode
 
 import (
-	"os"
 	"strconv"
 	"strings"
 
@@ -27,10 +26,7 @@ func IntcodeInterpreter(intcode []int, overwrites map[int]int) []int {
 }
 
 func GetIntcode(path string) []int {
-	wd, err := os.Getwd()
-	std.Check(err)
-	wd = wd[:strings.Index(wd, "/advent")+20]
-	lines := std.ReadFile(wd + "/" + path)
+	lines := std.ReadFile(path)
 	var intcode []int
 	for _, val := range strings.Split(lines[0], ",") {
 		num, err := strconv.Atoi(val)
