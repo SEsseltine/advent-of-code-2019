@@ -21,7 +21,7 @@ var day2ProbOneSamples = []*testSamples{
 	{[]int{1, 1, 1, 4, 99, 5, 6, 0, 99}, kv{}, []int{30, 1, 1, 4, 2, 5, 6, 0, 99}},
 }
 
-func TestProbOne(t *testing.T) {
+func TestBasicOptcodes(t *testing.T) {
 	for _, test := range day2ProbOneSamples {
 		got := optcode.IntcodeInterpreter(test.code, test.kv)
 		if !reflect.DeepEqual(got, test.expected) {
