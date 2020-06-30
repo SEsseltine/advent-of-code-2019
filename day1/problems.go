@@ -1,29 +1,23 @@
 package day1
 
 import (
+	"reflect"
 	"strconv"
 
 	"../lib/std"
 )
 
+type path struct {
+}
+
+type fn func(int) int
+
 func ProbOne() int {
-	sum := 0
-	for _, line := range std.ReadFile("./day1/problem_1.txt") {
-		val, err := strconv.Atoi(line)
-		std.Check(err)
-		sum += core(val)
-	}
-	return sum
+	return execute(core, "1")
 }
 
 func ProbTwo() int {
-	sum := 0
-	for _, line := range std.ReadFile("./day1/problem_2.txt") {
-		val, err := strconv.Atoi(line)
-		std.Check(err)
-		sum += coreExtension(val)
-	}
-	return sum
+	return execute(coreExtension, "2")
 }
 
 func core(mass int) int {
@@ -37,4 +31,18 @@ func coreExtension(mass int) int {
 	} else {
 		return 0
 	}
+}
+
+func execute(f fn, prob string) int {
+	path := reflect.TypeOf(path{}).PkgPath()
+	if path[0] == '_' {
+		path = path[1:]
+	}
+	sum := 0
+	for _, line := range std.ReadFile(path + "/problem_" + prob + ".txt") {
+		val, err := strconv.Atoi(line)
+		std.Check(err)
+		sum += f(val)
+	}
+	return sum
 }
