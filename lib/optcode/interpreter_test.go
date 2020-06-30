@@ -1,7 +1,10 @@
 package optcode_test
 
 import (
+	"io/ioutil"
+	"os"
 	"reflect"
+	"strings"
 	"testing"
 
 	"../optcode"
@@ -12,6 +15,11 @@ type testSamples struct {
 	code []int
 	kv
 	expected []int
+}
+type testExacts struct {
+	code []int
+	kv
+	expected string
 }
 
 var day2ProbOneSamples = []*testSamples{
@@ -25,7 +33,34 @@ func TestBasicOptcodes(t *testing.T) {
 	for _, test := range day2ProbOneSamples {
 		got := optcode.IntcodeInterpreter(test.code, test.kv)
 		if !reflect.DeepEqual(got, test.expected) {
-			t.Errorf("day1.ProbOne() = %d; want %d", got, test.expected)
+			t.Errorf("day2.ProbOne() = %d; want %d", got, test.expected)
+		}
+	}
+}
+
+var day5ProbTwoSamples = []*testExacts{
+	{[]int{3, 21, 1008, 21, 8, 20, 1005, 20, 22, 107, 8, 21, 20, 1006, 20, 31, 1106, 0, 36, 98, 0, 0, 1002, 21, 125, 20, 4, 20, 1105, 1, 46, 104, 999, 1105, 1, 46, 1101, 1000, 1, 20, 4, 20, 1105, 1, 46, 98, 99}, kv{-1: -1}, "999"},
+	{[]int{3, 21, 1008, 21, 8, 20, 1005, 20, 22, 107, 8, 21, 20, 1006, 20, 31, 1106, 0, 36, 98, 0, 0, 1002, 21, 125, 20, 4, 20, 1105, 1, 46, 104, 999, 1105, 1, 46, 1101, 1000, 1, 20, 4, 20, 1105, 1, 46, 98, 99}, kv{-1: 7}, "999"},
+	{[]int{3, 21, 1008, 21, 8, 20, 1005, 20, 22, 107, 8, 21, 20, 1006, 20, 31, 1106, 0, 36, 98, 0, 0, 1002, 21, 125, 20, 4, 20, 1105, 1, 46, 104, 999, 1105, 1, 46, 1101, 1000, 1, 20, 4, 20, 1105, 1, 46, 98, 99}, kv{-1: 8}, "1000"},
+	{[]int{3, 21, 1008, 21, 8, 20, 1005, 20, 22, 107, 8, 21, 20, 1006, 20, 31, 1106, 0, 36, 98, 0, 0, 1002, 21, 125, 20, 4, 20, 1105, 1, 46, 104, 999, 1105, 1, 46, 1101, 1000, 1, 20, 4, 20, 1105, 1, 46, 98, 99}, kv{-1: 9}, "1001"},
+	{[]int{3, 21, 1008, 21, 8, 20, 1005, 20, 22, 107, 8, 21, 20, 1006, 20, 31, 1106, 0, 36, 98, 0, 0, 1002, 21, 125, 20, 4, 20, 1105, 1, 46, 104, 999, 1105, 1, 46, 1101, 1000, 1, 20, 4, 20, 1105, 1, 46, 98, 99}, kv{-1: 100}, "1001"},
+}
+
+func TestConditionalOptcodes(t *testing.T) {
+	for _, test := range day5ProbTwoSamples {
+		rescueStdout := os.Stdout
+		r, w, _ := os.Pipe()
+		os.Stdout = w
+
+		_ = optcode.IntcodeInterpreter(test.code, test.kv)
+
+		w.Close()
+		out, _ := ioutil.ReadAll(r)
+		os.Stdout = rescueStdout
+
+		outStr := strings.TrimSpace(string(out))
+		if outStr != test.expected {
+			t.Errorf("Unexpected output! Got %s, expected %s", outStr, test.expected)
 		}
 	}
 }
